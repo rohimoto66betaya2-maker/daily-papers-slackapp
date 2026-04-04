@@ -1,0 +1,23 @@
+name: Daily Papers Bot
+
+on:
+  schedule:
+    - cron: '0 0 * * 1-5'  # 平日の朝9時（JST）
+  workflow_dispatch:  # 手動実行も可能
+
+jobs:
+  run-bot:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v5
+
+      - run: uv venv
+
+      - run: uv add requests openai python-dotenv
+
+      - run: uv run python main.py
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
