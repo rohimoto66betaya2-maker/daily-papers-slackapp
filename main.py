@@ -12,7 +12,7 @@ OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 client = OpenAI(api_key=OPENAI_API_KEY)
  
  
-def fetch_papers(limit=5):
+def fetch_papers(limit=3):
     response = requests.get(f"https://huggingface.co/api/daily_papers?limit={limit}")
     response.raise_for_status()
     return response.json()
@@ -69,28 +69,25 @@ def summarize(title, content):
     return response.choices[0].message.content
  
  
-def post_to_slack(message, image_url=None):
-    if image_url:
-        message += f"\n{image_url}"
+def post_to_slack(message):
     response = requests.post(SLACK_WEBHOOK_URL, json={"text": message})
     response.raise_for_status()
  
  
 def main():
-    papers = fetch_papers(limit=5)
+    papers = fetch_papers(limit=3)
  
     for paper in papers:
         title = paper.get("paper", {}).get("title", "タイトル不明")
         arxiv_id = paper.get("paper", {}).get("id", "")
         url = f"https://huggingface.co/papers/{arxiv_id}" if arxiv_id else ""
-        thumbnail = paper.get("thumbnail")
  
         content = fetch_content(paper)
         summary = summarize(title, content)
  
         message = f"*{title}*\n{url}\n\n{summary}"
  
-        post_to_slack(message, image_url=thumbnail)
+        post_to_slack(message)
         print(f"投稿完了: {title}")
  
 
@@ -99,4 +96,3 @@ if __name__ == "__main__":
         main()
     except Exception as e:
         print(f"エラー: {e}")
-

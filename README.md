@@ -1,12 +1,12 @@
 # HuggingFace Daily Papers Slack App
 
-HuggingFace の [Daily Papers](https://huggingface.co/papers) から最新論文を取得し、GPT で日本語要約して Slack に投稿するボット。
+HuggingFace の [Daily Papers](https://huggingface.co/papers) から最新論文を 1 日 3 件取得し、GPT で日本語要約して Slack に投稿するボット。
 
 平日朝 9 時（JST）に GitHub Actions で自動実行されます。
 
 ## 動作イメージ
 
-各論文について以下の形式で Slack に投稿されます：
+各論文について以下の形式で Slack にテキストのみ投稿されます：
 
 ```
 *論文タイトル*
