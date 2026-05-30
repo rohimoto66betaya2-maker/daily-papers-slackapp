@@ -12,10 +12,15 @@ OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 client = OpenAI(api_key=OPENAI_API_KEY)
  
  
-def fetch_papers(limit=3):
-    response = requests.get(f"https://huggingface.co/api/daily_papers?limit={limit}")
-    response.raise_for_status()
-    return response.json()
+def fetch_semantic_scholar(query="large language model", limit=3):
+ url = "https://api.semanticscholar.org/graph/v1/paper/search"
+ params = {
+ "query": query,
+ "limit": limit,
+ "fields": "title,abstract,url,year,citationCount"
+ }
+ response = requests.get(url, params=params)
+ return response.json()["data"]
  
  
 def fetch_content(paper):
