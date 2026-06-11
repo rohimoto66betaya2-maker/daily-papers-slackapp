@@ -20,7 +20,7 @@ def fetch_semantic_scholar(query="large language model", limit=3):
  "fields": "title,abstract,url,year,citationCount"
  }
  response = requests.get(url, params=params)
- return response.json()["dat
+ return response.json()["data"]
  
  
 def fetch_content(paper):
